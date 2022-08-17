@@ -1,15 +1,19 @@
 package com.emailScheduler.emailScheduler.Service;
 
+import com.emailScheduler.emailScheduler.Model.MailModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class MailService {
@@ -33,17 +37,21 @@ public class MailService {
     }
 
     //HTML mail sender method
-    public void sendMail2 (String to, String sub, String msg) throws MessagingException, UnsupportedEncodingException {
+    public void sendMail2 (MailModel mailModel) throws MessagingException, UnsupportedEncodingException {
 
         MimeMessage mailMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(mailMessage);
+        //MimeMessageHelper messageHelper = new MimeMessageHelper(mailMessage, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+        //messageHelper.addAttachment("attachmentFileName", new ClassPathResource("don't know for now"));
 
-        String unsubscribeURL= "http://localhost:8080/unsubscribe/" + to;
-        String html = "<a href= \"" + unsubscribeURL +"\">unsubscribe</a>";
+        Context context = new Context();
+        context.setVariables(mailModel.getProperties());
 
-        messageHelper.setFrom("saksham.gairola00@gmail.com", "Saksham Gairola");
-        messageHelper.setTo(to);
-        messageHelper.setSubject(sub);
+        String html = springTemplateEngine.process("confirmationEmailTemplate", context);
+
+        messageHelper.setFrom(mailModel.getSenderEmail(), mailModel.getSenderName());
+        messageHelper.setTo(mailModel.getReceiverEmail());
+        messageHelper.setSubject(mailModel.getEmailSubject());
         messageHelper.setText(html, true);
 
         javaMailSender.send(mailMessage);

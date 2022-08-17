@@ -25,37 +25,18 @@ public class MailController {
     MailModelRepository mailModelRepository;
 
     @GetMapping("getEmail")
-    public ModelAndView getEmail(UserModel email){
+    public ModelAndView getEmail(UserModel userModel){
         ModelAndView mav = new ModelAndView("getEmail");
-        mav.addObject("email", email);
-
+        mav.addObject("user", userModel);
         return mav;
     }
 
     @GetMapping("showResult")
-    public ModelAndView showEmail(@ModelAttribute UserModel email){
+    public ModelAndView showEmail(@ModelAttribute UserModel userModel){
         ModelAndView mav = new ModelAndView("show");
-        mav.addObject("email", email);
-        mailService.sendMail(email.getUserEmail(), email.getUserFirstName(),"Hello");
+        mav.addObject("user", userModel);
+        mailService.sendMail(userModel.getUserEmail(), userModel.getUserFirstName(),"Hello");
         return mav;
-    }
-
-    @GetMapping("test")
-    public void test(UserModel email){
-        email.setUserEmail("saksham.gairola06@gmail.com");
-        email.setUserFirstName("Saksham");
-        email.setUserLastName("Gairola");
-        String msg = "Hello Saksham";
-        try {
-            try {
-                mailService.sendMail2(email.getUserEmail(), email.getUserFirstName(),msg);
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.print("Sent");
     }
 
     @GetMapping("unsubscribe/{email}")
@@ -65,9 +46,9 @@ public class MailController {
         return mav;
     }
 
-    @GetMapping("")
+    //@GetMapping("")
     //@Scheduled(cron="0 0 10 */ * * *")
-    public void sendMails(){
+    /*public void sendMails(){
         List<UserModel> allMails = mailModelRepository.findAll();
         for(UserModel eachMail : allMails){
             String msg = "Hello " + eachMail.getUserFirstName();
@@ -79,5 +60,5 @@ public class MailController {
                 throw new RuntimeException(e);
             }
         }
-    }
+    }*/
 }
