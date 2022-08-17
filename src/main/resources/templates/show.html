@@ -5,7 +5,7 @@
   <title>Title</title>
 </head>
 <body>
-Hello <p th:text="${email.userName}"/>
+Hello <p th:text="${email.userFirstName + email.userLastName}"/>
 msg sent to <p th:text="${email.userEmail}"/>
 </body>
 </html>
