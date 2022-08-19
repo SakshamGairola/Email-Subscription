@@ -1,5 +1,6 @@
 package com.emailScheduler.emailScheduler.Controller;
 
+import com.emailScheduler.emailScheduler.Model.MailModel;
 import com.emailScheduler.emailScheduler.Model.UserModel;
 import com.emailScheduler.emailScheduler.Repository.MailModelRepository;
 import com.emailScheduler.emailScheduler.Service.MailService;
@@ -13,7 +14,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class MailController {
@@ -25,37 +28,30 @@ public class MailController {
     MailModelRepository mailModelRepository;
 
     @GetMapping("getEmail")
-    public ModelAndView getEmail(UserModel email){
+    public ModelAndView getEmail(UserModel userModel){
         ModelAndView mav = new ModelAndView("getEmail");
-        mav.addObject("email", email);
-
+        mav.addObject("user", userModel);
         return mav;
     }
 
-    @GetMapping("showResult")
-    public ModelAndView showEmail(@ModelAttribute UserModel email){
-        ModelAndView mav = new ModelAndView("show");
-        mav.addObject("email", email);
-        mailService.sendMail(email.getUserEmail(), email.getUserFirstName(),"Hello");
-        return mav;
-    }
+    @GetMapping("confirmation")
+    public ModelAndView sendConfirmationEmail(@ModelAttribute UserModel userModel) throws MessagingException, UnsupportedEncodingException {
+        ModelAndView mav = new ModelAndView("confirmationPage");
+        mav.addObject("user", userModel);
 
-    @GetMapping("test")
-    public void test(UserModel email){
-        email.setUserEmail("saksham.gairola06@gmail.com");
-        email.setUserFirstName("Saksham");
-        email.setUserLastName("Gairola");
-        String msg = "Hello Saksham";
-        try {
-            try {
-                mailService.sendMail2(email.getUserEmail(), email.getUserFirstName(),msg);
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
-            }
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.print("Sent");
+        mailModelRepository.save(userModel);
+
+        String emailSubject = "Subscribed";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("userFirstName", userModel.getUserFirstName());
+        map.put("userLastName", userModel.getUserLastName());
+        map.put("userEmail", userModel.getUserEmail());
+
+        MailModel mailModel = new MailModel(userModel.getUserEmail(), emailSubject, map);
+
+        mailService.sendHTMLMail(mailModel, "confirmationEmailTemplate");
+        return mav;
     }
 
     @GetMapping("unsubscribe/{email}")
@@ -65,18 +61,29 @@ public class MailController {
         return mav;
     }
 
-    @GetMapping("")
-    //@Scheduled(cron="0 0 10 */ * * *")
+    //@Scheduled(cron="0 0 10 */ * * ")
+    @Scheduled(cron="0 */1 * * * * ")
     public void sendMails(){
-        List<UserModel> allMails = mailModelRepository.findAll();
-        for(UserModel eachMail : allMails){
-            String msg = "Hello " + eachMail.getUserFirstName();
-            try {
-                mailService.sendMail2(eachMail.getUserEmail(), eachMail.getUserFirstName(), msg);
-            } catch (MessagingException e) {
-                throw new RuntimeException(e);
-            } catch (UnsupportedEncodingException e) {
-                throw new RuntimeException(e);
+
+        String emailSubject = "Message of the day";
+
+        List<UserModel> allUsers = mailModelRepository.findAll();
+        if (allUsers != null) {
+            for (UserModel eachUser : allUsers) {
+
+                Map<String, Object> map = new HashMap<>();
+                map.put("userFirstName", eachUser.getUserFirstName());
+                map.put("userLastName", eachUser.getUserLastName());
+                map.put("userEmail", eachUser.getUserEmail());
+
+                MailModel mailModel = new MailModel(eachUser.getUserEmail(), emailSubject, map);
+                try {
+                    mailService.sendHTMLMail(mailModel, "scheduledEmailTemplate");
+                } catch (MessagingException e) {
+                    throw new RuntimeException(e);
+                } catch (UnsupportedEncodingException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
