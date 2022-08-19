@@ -26,6 +26,16 @@ public class TestingController {
     @Autowired
     MailModelRepository mailModelRepository;
 
+    @GetMapping("")
+    public void test0(){
+
+        System.out.println(mailModelRepository.existsById("someString"));
+        if(mailModelRepository.existsById("someString")){
+            System.out.println("empty");
+        }else{
+            System.out.println("NOt");}
+    }
+
     //make it ModelAndView type to test on browser and not send emails
     @GetMapping("test")
     public ModelAndView test(UserModel userModel) {

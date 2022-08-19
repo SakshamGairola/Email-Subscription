@@ -10,6 +10,7 @@ public class UserModel {
     private String userEmail;
     private String userFirstName;
     private String userLastName;
+    private boolean isSubscribed;
 
     public String getUserEmail() {
         return userEmail;
@@ -35,12 +36,21 @@ public class UserModel {
         this.userLastName = userLastName;
     }
 
+    public boolean isSubscribed() {
+        return isSubscribed;
+    }
+
+    public void setSubscribed(boolean subscribed) {
+        isSubscribed = subscribed;
+    }
+
     @Override
     public String toString() {
         return "UserModel{" +
                 "userEmail='" + userEmail + '\'' +
                 ", userFirstName='" + userFirstName + '\'' +
                 ", userLastName='" + userLastName + '\'' +
+                ", isSubscribed=" + isSubscribed +
                 '}';
     }
 }

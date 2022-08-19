@@ -17,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 public class MailController {
@@ -36,21 +37,32 @@ public class MailController {
 
     @GetMapping("confirmation")
     public ModelAndView sendConfirmationEmail(@ModelAttribute UserModel userModel) throws MessagingException, UnsupportedEncodingException {
-        ModelAndView mav = new ModelAndView("confirmationPage");
+
+        ModelAndView mav = new ModelAndView();
         mav.addObject("user", userModel);
 
-        mailModelRepository.save(userModel);
+        //check if user exist
+        if (mailModelRepository.existsById(userModel.getUserEmail())){ //returns true
 
-        String emailSubject = "Subscribed";
+            mav.setViewName("confirmationPage");
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("userFirstName", userModel.getUserFirstName());
-        map.put("userLastName", userModel.getUserLastName());
-        map.put("userEmail", userModel.getUserEmail());
+            mailModelRepository.save(userModel);
 
-        MailModel mailModel = new MailModel(userModel.getUserEmail(), emailSubject, map);
+            String emailSubject = "Subscribed";
 
-        mailService.sendHTMLMail(mailModel, "confirmationEmailTemplate");
+            Map<String, Object> map = new HashMap<>();
+            map.put("userFirstName", userModel.getUserFirstName());
+            map.put("userLastName", userModel.getUserLastName());
+            map.put("userEmail", userModel.getUserEmail());
+
+            MailModel mailModel = new MailModel(userModel.getUserEmail(), emailSubject, map);
+
+            mailService.sendHTMLMail(mailModel, "confirmationEmailTemplate");
+        }
+        else{
+
+        }
+
         return mav;
     }
 
