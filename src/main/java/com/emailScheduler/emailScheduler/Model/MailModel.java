@@ -4,27 +4,16 @@ import java.util.Map;
 
 public class MailModel {
 
-    private String senderEmail;
-    private String senderName;
     private String receiverEmail;
     private String emailSubject;
+
+    public MailModel(String receiverEmail, String emailSubject, Map<String, Object> properties) {
+        this.receiverEmail = receiverEmail;
+        this.emailSubject = emailSubject;
+        this.properties = properties;
+    }
+
     private Map<String, Object> properties;
-
-    public String getSenderEmail() {
-        return senderEmail;
-    }
-
-    public void setSenderEmail(String senderEmail) {
-        this.senderEmail = senderEmail;
-    }
-
-    public String getSenderName() {
-        return senderName;
-    }
-
-    public void setSenderName(String senderName) {
-        this.senderName = senderName;
-    }
 
     public String getReceiverEmail() {
         return receiverEmail;
@@ -53,8 +42,6 @@ public class MailModel {
     @Override
     public String toString() {
         return "MailModel{" +
-                "senderEmail='" + senderEmail + '\'' +
-                ", senderName='" + senderName + '\'' +
                 ", receiverEmail='" + receiverEmail + '\'' +
                 ", emailSubject='" + emailSubject + '\'' +
                 ", properties=" + properties +

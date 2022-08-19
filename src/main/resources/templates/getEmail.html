@@ -2,10 +2,10 @@
 <html xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Enter Details</title>
 </head>
 <body>
-<form action="#" th:action="@{test2}" th:object="${user}">
+<form action="#" th:action="@{confirmation}" th:object="${user}">
     <p>First Name: <input type="text" th:field="*{userFirstName}"></p>
     <p>Last Name: <input type="text" th:field="*{userLastName}"></p>
     <p>Email: <input type="text" th:field="*{userEmail}"></p>

@@ -5,16 +5,9 @@
     <title>Title</title>
 </head>
 <body>
-<p>Hi, <b><span th:text="${userFirstName + ' ' + userLastName}"></span></b></p>
-<p><span th:text="${userEmail}"></span></p>
+<p>Hi <b><span th:text="${userFirstName + ' ' + userLastName + ','}"></span></b></p>
 <p>You are now subscribed for daily newsletter</p>
 <br><br>
-<p>Want to opt out? </p>
-<p><a th:href="@{https:localhost:8080/unsubscribeTest/{userEmail}(userEmail=${userEmail})}">Unsubscribe</a> here</p>
-<br><br>
-<p>senderEmail: <b><span th:text="${senderEmail}"></span></b></p>
-<p>senderName: <b><span th:text="${senderName}"></span></b></p>
-<p>receiverEmail: <b><span th:text="${receiverEmail}"></span></b></p>
-<p>emailSubject: <b><span th:text="${emailSubject}"></span></b></p>
+<p>Want to opt out? <a th:href="@{http://localhost:8080/unsubscribe/{userEmail}(userEmail=${userEmail})}">Unsubscribe</a> here</p>
 </body>
 </html>

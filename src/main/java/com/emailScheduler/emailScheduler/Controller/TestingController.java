@@ -51,14 +51,12 @@ public class TestingController {
         mailModel.setProperties(map);
 
         mailModel.setReceiverEmail(userModel.getUserEmail());
-        mailModel.setSenderEmail("saksham.gairola00@gmail.com");
-        mailModel.setSenderName("Saksham");
         mailModel.setEmailSubject("mailing HTML template");
 
         System.out.println(userModel);
         System.out.println(mailModel);
 
-        mailService.sendMail2(mailModel);
+        mailService.sendHTMLMail(mailModel, "getEmail");
         return mav;
     }
 
