@@ -36,11 +36,11 @@ public class UserModel {
         this.userLastName = userLastName;
     }
 
-    public boolean isSubscribed() {
+    public boolean getIsSubscribed() {
         return isSubscribed;
     }
 
-    public void setSubscribed(boolean subscribed) {
+    public void setIsSubscribed(boolean subscribed) {
         isSubscribed = subscribed;
     }
 

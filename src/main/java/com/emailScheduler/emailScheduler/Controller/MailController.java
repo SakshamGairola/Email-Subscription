@@ -42,10 +42,13 @@ public class MailController {
         mav.addObject("user", userModel);
 
         //check if user exist
-        if (mailModelRepository.existsById(userModel.getUserEmail())){ //returns true
-
+        if (mailModelRepository.existsById(userModel.getUserEmail())){ //returns false
+            mav.setViewName("existingUser");
+        }
+        else{
             mav.setViewName("confirmationPage");
 
+            userModel.setIsSubscribed(true);
             mailModelRepository.save(userModel);
 
             String emailSubject = "Subscribed";
@@ -57,12 +60,9 @@ public class MailController {
 
             MailModel mailModel = new MailModel(userModel.getUserEmail(), emailSubject, map);
 
-            mailService.sendHTMLMail(mailModel, "confirmationEmailTemplate");
+            //mailService.sendHTMLMail(mailModel, "confirmationEmailTemplate");
         }
-        else{
-
-        }
-
+        System.out.println(userModel);
         return mav;
     }
 
