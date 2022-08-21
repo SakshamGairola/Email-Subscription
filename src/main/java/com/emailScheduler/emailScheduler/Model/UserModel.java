@@ -2,18 +2,21 @@ package com.emailScheduler.emailScheduler.Model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document("subscribedUsers")
 public class UserModel {
 
     @Id
     private String userEmail;
+    @Field("userFirstName")
     private String userFirstName;
+    @Field("userLastName")
     private String userLastName;
-    private boolean isSubscribed;
+
 
     public String getUserEmail() {
-        return userEmail;
+        return userEmail.toLowerCase();
     }
 
     public void setUserEmail(String userEmail) {
@@ -36,21 +39,12 @@ public class UserModel {
         this.userLastName = userLastName;
     }
 
-    public boolean getIsSubscribed() {
-        return isSubscribed;
-    }
-
-    public void setIsSubscribed(boolean subscribed) {
-        isSubscribed = subscribed;
-    }
-
     @Override
     public String toString() {
         return "UserModel{" +
                 "userEmail='" + userEmail + '\'' +
                 ", userFirstName='" + userFirstName + '\'' +
                 ", userLastName='" + userLastName + '\'' +
-                ", isSubscribed=" + isSubscribed +
                 '}';
     }
 }

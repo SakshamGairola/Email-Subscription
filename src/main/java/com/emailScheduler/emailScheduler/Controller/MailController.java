@@ -2,9 +2,10 @@ package com.emailScheduler.emailScheduler.Controller;
 
 import com.emailScheduler.emailScheduler.Model.MailModel;
 import com.emailScheduler.emailScheduler.Model.UserModel;
-import com.emailScheduler.emailScheduler.Repository.MailModelRepository;
+import com.emailScheduler.emailScheduler.Repository.UserModelRepository;
 import com.emailScheduler.emailScheduler.Service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,7 +18,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 public class MailController {
@@ -26,10 +26,13 @@ public class MailController {
     MailService mailService;
 
     @Autowired
-    MailModelRepository mailModelRepository;
+    UserModelRepository userModelRepository;
+
+    @Autowired
+    MongoTemplate mongoTemplate;
 
     @GetMapping("getEmail")
-    public ModelAndView getEmail(UserModel userModel){
+    public ModelAndView getEmail(UserModel userModel) {
         ModelAndView mav = new ModelAndView("getEmail");
         mav.addObject("user", userModel);
         return mav;
@@ -42,14 +45,13 @@ public class MailController {
         mav.addObject("user", userModel);
 
         //check if user exist
-        if (mailModelRepository.existsById(userModel.getUserEmail())){ //returns false
+        if (userModelRepository.existsById(userModel.getUserEmail())) { //returns false
             mav.setViewName("existingUser");
-        }
-        else{
+        } else {
             mav.setViewName("confirmationPage");
 
             userModel.setIsSubscribed(true);
-            mailModelRepository.save(userModel);
+            userModelRepository.save(userModel);
 
             String emailSubject = "Subscribed";
 
@@ -60,29 +62,28 @@ public class MailController {
 
             MailModel mailModel = new MailModel(userModel.getUserEmail(), emailSubject, map);
 
-            //mailService.sendHTMLMail(mailModel, "confirmationEmailTemplate");
+            mailService.sendHTMLMail(mailModel, "confirmationEmailTemplate");
         }
         System.out.println(userModel);
         return mav;
     }
 
     @GetMapping("unsubscribe/{email}")
-    public ModelAndView unsubscribe(@PathVariable String email){
+    public ModelAndView unsubscribe(@PathVariable String email) {
         ModelAndView mav = new ModelAndView("unsubscribe");
-        mailModelRepository.deleteById(email);
+        userModelRepository.deleteById(email);
         return mav;
     }
 
-    //@Scheduled(cron="0 0 10 */ * * ")
-    @Scheduled(cron="0 */1 * * * * ")
-    public void sendMails(){
+    @Scheduled(cron = "0 0 10 */ * * ")
+    //@Scheduled(cron="0 */1 * * * * ")
+    public void sendMails() {
 
         String emailSubject = "Message of the day";
 
-        List<UserModel> allUsers = mailModelRepository.findAll();
+        List<UserModel> allUsers = userModelRepository.findAll();
         if (allUsers != null) {
             for (UserModel eachUser : allUsers) {
-
                 Map<String, Object> map = new HashMap<>();
                 map.put("userFirstName", eachUser.getUserFirstName());
                 map.put("userLastName", eachUser.getUserLastName());
@@ -100,3 +101,4 @@ public class MailController {
         }
     }
 }
+

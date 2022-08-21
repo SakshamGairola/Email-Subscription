@@ -2,7 +2,7 @@ package com.emailScheduler.emailScheduler.Controller;
 
 import com.emailScheduler.emailScheduler.Model.MailModel;
 import com.emailScheduler.emailScheduler.Model.UserModel;
-import com.emailScheduler.emailScheduler.Repository.MailModelRepository;
+import com.emailScheduler.emailScheduler.Repository.UserModelRepository;
 import com.emailScheduler.emailScheduler.Service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,13 +24,13 @@ public class TestingController {
 
     //For CURD ops
     @Autowired
-    MailModelRepository mailModelRepository;
+    UserModelRepository userModelRepository;
 
     @GetMapping("")
     public void test0(){
 
-        System.out.println(mailModelRepository.existsById("someString"));
-        if(mailModelRepository.existsById("someString")){
+        System.out.println(userModelRepository.existsById("someString"));
+        if(userModelRepository.existsById("someString")){
             System.out.println("empty");
         }else{
             System.out.println("NOt");}

@@ -8,6 +8,6 @@
 <p>Hi, <b><span th:text="${userFirstName + ' ' + userLastName + ','}"></span></b></p>
 <p>You are now subscribed for daily newsletter</p>
 <br><br>
-<p>Want to opt out? <a th:href="@{http://localhost:8080/unsubscribeTest/{userEmail}(userEmail=${userEmail})}">Unsubscribe</a> here</p>
+<p>Want to opt out? <a th:href="@{http://localhost:8080/unsubscribe/{userEmail}(userEmail=${userEmail})}">Unsubscribe</a> here</p>
 </body>
 </html>
