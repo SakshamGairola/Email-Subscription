@@ -45,12 +45,11 @@ public class MailController {
         mav.addObject("user", userModel);
 
         //check if user exist
-        if (userModelRepository.existsById(userModel.getUserEmail())) { //returns false
+        if (userModelRepository.existsById(userModel.getUserEmail())) { //returns true
             mav.setViewName("existingUser");
         } else {
             mav.setViewName("confirmationPage");
 
-            userModel.setIsSubscribed(true);
             userModelRepository.save(userModel);
 
             String emailSubject = "Subscribed";
@@ -75,7 +74,7 @@ public class MailController {
         return mav;
     }
 
-    @Scheduled(cron = "0 0 10 */ * * ")
+    @Scheduled(cron = "0 0 10 */1 * * ")
     //@Scheduled(cron="0 */1 * * * * ")
     public void sendMails() {
 

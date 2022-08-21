@@ -16,11 +16,11 @@ public class UserModel {
 
 
     public String getUserEmail() {
-        return userEmail.toLowerCase();
+        return userEmail;
     }
 
     public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+        this.userEmail = userEmail.toLowerCase();
     }
 
     public String getUserFirstName() {
