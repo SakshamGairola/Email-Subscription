@@ -1,11 +1,9 @@
-FROM ubuntu:latest AS build
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
-COPY . . 
+FROM maven:3.6.0-jdk-11-slim AS build
+COPY src /home/app/src
+COPY pom.xml /home/app
+RUN mvn -f /home/app/pom.xml clean package
 
 FROM openjdk:17-jdk-slim
-VOLUME /tmp
+COPY --from=build /home/app/target/emailscheduler-v1.jar app.jar
 EXPOSE 8080
-ARG JAR_FILE=target/emailscheduler-v1.jar
-ADD ${JAR_FILE} app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
