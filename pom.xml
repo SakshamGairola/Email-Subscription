@@ -8,11 +8,11 @@
 		<version>2.7.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.emailScheduler</groupId>
-	<artifactId>emailScheduler</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>emailScheduler</name>
-	<description>emailScheduler Application</description>
+	<groupId>com.emailscheduler</groupId>
+	<artifactId>emailscheduler</artifactId>
+	<version>v1</version>
+	<name>emailscheduler</name>
+	<description>emailscheduler Application</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
