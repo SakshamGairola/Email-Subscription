@@ -1,4 +1,9 @@
-FROM eclipse-temurin:17-jdk-alpine
+FROM ubuntu:latest AS build
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
+COPY . . 
+
+FROM openjdk:17-jdk-slim
 VOLUME /tmp
 EXPOSE 8080
 ARG JAR_FILE=target/emailscheduler-v1.jar
