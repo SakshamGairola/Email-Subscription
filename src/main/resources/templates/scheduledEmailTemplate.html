@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>Hi, <b><span th:text="${userFirstName + ' ' + userLastName + ','}"></span></b></p>
+<p>You are now subscribed for daily newsletter</p>
+<br><br>
+<p>Want to opt out? <a th:href="@{https://javamailsenderapp.herokuapp.com/unsubscribe/{userEmail}(userEmail=${userEmail})}">Unsubscribe</a> here</p>
+</body>
+</html>
